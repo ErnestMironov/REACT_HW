@@ -1,3 +1,4 @@
+import { memo, useCallback, useMemo } from 'react'
 import { FavoriteProduct } from '../../../shared'
 import './FavoriteItem.css'
 
@@ -7,17 +8,31 @@ interface FavoriteItemProps {
   onUpdateQuantity: (quantity: number) => void
 }
 
-export const FavoriteItem = ({ 
+export const FavoriteItem = memo(({ 
   favorite, 
   onRemove, 
   onUpdateQuantity 
 }: FavoriteItemProps) => {
   const { name, price, quantity, addedAt, image } = favorite
-  const addedDate = new Date(addedAt)?.toLocaleDateString()
   
-  const formatPrice = (price: number) => {
+  const formatDate = useCallback((date: string) => {
+    return new Date(date)?.toLocaleDateString()
+  }, [])
+
+  const formatPrice = useCallback((price: number) => {
     return price?.toLocaleString('ru-RU') + ' ₽'
-  }
+  }, [])
+
+  const formattedPrice = useMemo(() => formatPrice(price), [formatPrice, price])
+  const formattedDate = useMemo(() => formatDate(addedAt), [formatDate, addedAt])
+
+  const handleDecrease = useCallback(() => {
+    onUpdateQuantity(quantity - 1)
+  }, [onUpdateQuantity, quantity])
+
+  const handleIncrease = useCallback(() => {
+    onUpdateQuantity(quantity + 1)
+  }, [onUpdateQuantity, quantity])
 
   return (
     <li className="favorite__item">
@@ -26,23 +41,23 @@ export const FavoriteItem = ({
       </div>
       <div className="favorite__info">
         <h3 className="favorite__name">{name}</h3>
-        <p className="favorite__price">{formatPrice(price)}</p>
+        <p className="favorite__price">{formattedPrice}</p>
         <p className="favorite__meta">
-          Добавлено: {addedDate}
+          Добавлено: {formattedDate}
         </p>
       </div>
       
       <div className="favorite__quantity-controls">
         <button 
           className="favorite__quantity-btn"
-          onClick={() => onUpdateQuantity(quantity - 1)}
+          onClick={handleDecrease}
         >
           -
         </button>
         <span className="favorite__quantity">{quantity}</span>
         <button 
           className="favorite__quantity-btn"
-          onClick={() => onUpdateQuantity(quantity + 1)}
+          onClick={handleIncrease}
         >
           +
         </button>
@@ -56,4 +71,4 @@ export const FavoriteItem = ({
       </button>
     </li>
   )
-} 
+}) 

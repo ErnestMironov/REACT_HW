@@ -1,10 +1,11 @@
+import { memo } from 'react'
 import { ProductItem } from '../../entities/product/ui/ProductItem'
 import { useProductsData } from '../../shared/lib/useProductsData'
 import { useFavorites } from '../../entities/favorite/model/FavoritesContext'
 import './ProductList.css'
 import { StyledLink } from '../../shared/ui/StyledLink/StyledLink'
 
-export const ProductList = () => {
+export const ProductList = memo(() => {
   const { products, loading, error } = useProductsData()
   const { addToFavorites, favorites } = useFavorites()
 
@@ -31,7 +32,7 @@ export const ProductList = () => {
         </div>
       ) : (
         <div className="products__grid">
-          {products.map((product) => (
+          {products.map(product => (
             <ProductItem 
               key={product.id} 
               product={product} 
@@ -42,4 +43,4 @@ export const ProductList = () => {
       )}
     </div>
   )
-} 
+})

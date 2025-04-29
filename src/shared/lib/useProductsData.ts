@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { Product } from '../types/Product'
 
 const mockProducts: Product[] = [
@@ -73,23 +73,25 @@ export const useProductsData = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    const fetchProducts = () => {
-      setLoading(true)
-      try {
-        setTimeout(() => {
-          setProducts(mockProducts)
-          setLoading(false)
-        }, 800)
-      } catch (err) {
-        console.error('Ошибка при загрузке товаров:', err)
-        setError('Ошибка при загрузке товаров')
-        setLoading(false)
-      }
-    }
+  const memoizedMockProducts = useMemo(() => mockProducts, [])
 
+  const fetchProducts = useCallback(() => {
+    setLoading(true)
+    try {
+      setTimeout(() => {
+        setProducts(memoizedMockProducts)
+        setLoading(false)
+      }, 800)
+    } catch (err) {
+      console.error('Ошибка при загрузке товаров:', err)
+      setError('Ошибка при загрузке товаров')
+      setLoading(false)
+    }
+  }, [memoizedMockProducts])
+
+  useEffect(() => {
     fetchProducts()
-  }, [])
+  }, [fetchProducts])
 
   return { products, loading, error }
 } 
