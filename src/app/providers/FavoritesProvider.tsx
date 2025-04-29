@@ -1,0 +1,1 @@
+export { FavoritesProvider } from '../../entities/favorite/model/FavoritesContext' 

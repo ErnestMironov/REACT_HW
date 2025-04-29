@@ -1,0 +1,20 @@
+.my-btn {
+  position: relative;
+  padding: 10px 28px;
+  border: none;
+  border-radius: 32px;
+  background: linear-gradient(90deg, #4f8cff 0%, #6f6bff 50%, #4f8cff 100%);
+  background-size: 200% 100%;
+  background-position: 0% 0%;
+  color: #fff;
+  font-size: 1.08rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 12px 0 rgba(79, 140, 255, 0.12);
+  transition: background-position 0.3s ease, box-shadow 0.2s ease;
+}
+
+.my-btn:hover {
+  background-position: 100% 0%;
+  box-shadow: 0 6px 24px 0 rgba(79, 140, 255, 0.22);
+} 
